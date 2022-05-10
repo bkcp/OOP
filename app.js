@@ -1,31 +1,61 @@
-
-function hex(r,g,b){
-    return "#" + ((1<<24) + (r<<16) + (g<<8) + b).toString(16).slice(1);
+//FACTORY FUNCTIONS
+function hex(r, g, b) {
+  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 }
 
-function rgb(r,g,b){
+function rgb(r, g, b) {
+  return `rgb(${r},${g},${b})`;
+}
+
+function makeColor(r, g, b) {
+  const color = {};
+  color.r = r;
+  color.g = g;
+  color.b = b;
+
+  color.rgb = function () {
+    const { r, g, b } = this;
     return `rgb(${r},${g},${b})`;
+  };
+  color.hex = function () {
+    const { r, g, b } = this;
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  };
+  return color;
 }
 
+const firstColor = makeColor(34, 33, 250);
 
+//CONSTRUCTOR FUNCTIONS
+//NEW creates a blank, plain Javascript object;
+// Links(sets the constructor of) this object to another object;
+// Passes the newly created object from Step 1 as the THIS context;
+// Returns THIS if the function doesnt return its own object.
 
-function makeColor(r,g,b){
-    const color = {};
-    color.r = r;
-    color.g = g;
-    color.b = b;
+function Color(r, g, b) {
+  this.r = r;
+  this.g = g;
+  this.b = b;
+  console.log(this);
+}
 
-    color.rgb = function(){
-        const {r,g,b} = this;
-        return `rgb(${r},${g},${b})`;
-    }
-    color.hex = function(){
-        const {r,g,b} = this;
-        return "#" + ((1<<24) + (r<<16) + (g<<8) + b).toString(16).slice(1);   
-    }
-    return color; 
+Color.prototype.rgb = function () {
+  const { r, g, b } = this;
+  return `rgb(${r},${g},${b})`;
+};
+new Color(255, 30, 100);
 
-    
-    }
+Color.prototype.hex = function () {
+  const { r, g, b } = this;
+  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+};
 
-  const firstColor = makeColor(34,33,250);
+Color.prototype.rgba = function (a = 1.0) {
+  const { r, g, b } = this;
+  return `rgba(${r},${g},${b},${a})`;
+};
+
+const color1 = new Color(23, 54, 234);
+const color2 = new Color(255, 34, 0);
+
+document.body.style.backgroundColor = color2.rgba(0.5);
